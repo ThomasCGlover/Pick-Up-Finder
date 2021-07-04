@@ -12,11 +12,12 @@ app.use(middleware.headers);
 // app.use(Express.json());
 app.use("/user", controllers.userController);
 app.use("/game", controllers.gameController);
+app.use("/comment",controllers.commController);
 
 dbConnection
     .authenticate()
     .then(() => dbConnection.sync(
-        // {alter: true}
+        {alter: true}
     ))
     .then(() => {
         app.listen(process.env.PORT, () => {

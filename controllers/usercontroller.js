@@ -5,13 +5,15 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const middleware = require('../middleware');
 
+
 // register user
 router.post("/register", async (req, res) => {
-    let {username, password} = req.body;
+    let {username, password, role} = req.body;
     try{
         const newUser = await UserModel.create({
             username,
-            password: bcrypt.hashSync(password, 10)
+            password: bcrypt.hashSync(password, 10),
+            role
         });
 
         const token = jwt.sign({id: newUser.id}, process.env.JWT_SECRET, {expiresIn: 60 * 60 * 24})
@@ -92,6 +94,26 @@ router.get("/", middleware.validateSession, async (req, res) =>{
         res.status(500).json({
             message:`Failed to retrieve username: ${err}`
         })
+    }
+})
+
+// ADMIN delete user
+router.delete('delete/admin/:userId', middleware.validateSession, async (req, res) => {
+    const {userId} = req.params.userId;
+    if (req.user.role === 'admin'){
+        try{
+            const deleteUser = await UserModel.destroy({
+                where: { id: userId }
+            })
+            res.status(200).json({
+                message: "User successfully deleted",
+                deletedUser: deleteUser
+            })
+        } catch(err){
+            res.status(500).json({
+                message: `Failed to delete user: ${err}`
+            })
+        }
     }
 })
 

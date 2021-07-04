@@ -14,7 +14,6 @@ GameModel.hasMany(CommModel);
 CommModel.belongsTo(GameModel);
 
 module.exports = {
-    // dbConnection: db,
     
     GameModel, UserModel, CommModel,
     
