@@ -35,11 +35,11 @@ router.post("/create", middleware.validateSession, async (req, res) => {
 })
 
 // gets game by city
-router.get("/search", middleware.validateSession, async (req, res) => {
+router.get("/search/:city", middleware.validateSession, async (req, res) => {
     try{
-        const {searchedCity} = req.body;
         const gamesbyCity = await GameModel.findAll({
-            where: {city: searchedCity}
+            where: {city: req.params.city},
+            include: CommModel
         })
         res.status(200).json(
             gamesbyCity
@@ -52,17 +52,21 @@ router.get("/search", middleware.validateSession, async (req, res) => {
 })
 
 // allows user to delete a game they've created
-router.delete('/delete', middleware.validateSession, async (req, res) => {
+router.delete('/delete/:id', middleware.validateSession, async (req, res) => {
     const {id} = req.user;
-    const {GameId} = req.body;
     try {
         const deletedGame = await GameModel.destroy({
             where: { 
                 userId: id,
-                id: GameId,
+                id: req.params.id,
 
             }
         })
+        // const deletedComments = await CommModel.destroy({
+        //     where: {
+                
+        //     }
+        // })
         res.status(200).json({
             message: "Game successfully deleted",
             deletedGame: deletedGame === 0? 'none' : deletedGame,
@@ -75,10 +79,11 @@ router.delete('/delete', middleware.validateSession, async (req, res) => {
 })
 
 // gets all games for individual users with associated comments included
-router.get("/:id", middleware.validateSession, async (req,res) => {
+router.get("/mygames", middleware.validateSession, async (req,res) => {
+    const {id} = req.user;
     try {
         const userGames = await GameModel.findAll({
-            where: {userId:req.params.id},
+            where: {userId:id},
                     include: CommModel
                 }
             
@@ -90,14 +95,14 @@ router.get("/:id", middleware.validateSession, async (req,res) => {
 })
 
 // allows user to edit game they've created
-router.put('/edit/:id', middleware.validateSession, async (req, res) =>{
+router.put('/edit/:GameId', middleware.validateSession, async (req, res) =>{
     const {city, address, playersNeeded, time, date, skillPref} = req.body;
     const {id} = req.user;
     try{
         const gameUpdate = await GameModel.update({
             city, address, playersNeeded, time, date, skillPref},
             {where: { 
-                id: req.params.id,
+                id: req.params.GameId,
                 userId: id,
 
             }}

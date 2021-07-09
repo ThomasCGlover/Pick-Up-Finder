@@ -98,8 +98,8 @@ router.get("/", middleware.validateSession, async (req, res) =>{
 })
 
 // ADMIN delete user
-router.delete('delete/admin/:userId', middleware.validateSession, async (req, res) => {
-    const {userId} = req.params.userId;
+router.delete('/delete/admin/:userId', middleware.validateSession, async (req, res) => {
+    const {userId} = req.params;
     if (req.user.role === 'admin'){
         try{
             const deleteUser = await UserModel.destroy({
@@ -114,6 +114,10 @@ router.delete('delete/admin/:userId', middleware.validateSession, async (req, re
                 message: `Failed to delete user: ${err}`
             })
         }
+    } else{
+        res.status(401).json({
+            message: `Unauthorized`
+        })
     }
 })
 

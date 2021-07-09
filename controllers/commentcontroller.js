@@ -76,4 +76,23 @@ router.put('/edit/:id', middleware.validateSession, async (req, res) =>{
     }
 })
 
+// gets all comments for individual user
+router.get('/mycomments', middleware.validateSession, async (req, res) => {
+    const {id} = req.user;
+    try{
+        const userComments = await CommModel.findAll({
+            where: {
+                userId: id
+            }
+        })
+        res.status(200).json({
+            userComments
+        })
+    }catch(err){
+        res.status(500).json({
+            message: `Failed to get comments: ${err}`
+        })
+    }
+})
+
 module.exports = router;
