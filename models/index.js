@@ -4,13 +4,23 @@ const UserModel = require('./user');
 const GameModel = require('./game');
 const CommModel = require('./comment');
 
-UserModel.hasMany(GameModel);
-GameModel.belongsTo(UserModel);
+UserModel.hasMany(GameModel, {
+    as: 'games',
+    foreignKey: 'userId'
+});
 
-UserModel.hasMany(CommModel);
+
+UserModel.hasMany(CommModel, {
+    foreignKey: "userId"
+});
 CommModel.belongsTo(UserModel);
 
-GameModel.hasMany(CommModel);
+GameModel.hasMany(CommModel, {
+    foreignKey: "GameId",
+
+});
+
+GameModel.belongsTo(UserModel);
 CommModel.belongsTo(GameModel);
 
 module.exports = {

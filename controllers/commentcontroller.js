@@ -4,13 +4,13 @@ const middleware = require('../middleware');
 
 
 // create comment
-router.post("/add", middleware.validateSession, async (req, res) => {
-    const {content, GameId} = req.body;
+router.post("/add/:GameId", middleware.validateSession, async (req, res) => {
+    const {content} = req.body;
     const {id} = req.user;
     const createComment = {
         content: content,
         userId: id,
-        GameId: GameId,
+        GameId: req.params.GameId,
     }
 
     try{
@@ -30,14 +30,13 @@ router.post("/add", middleware.validateSession, async (req, res) => {
 })
 
 // allows user to delete comment they've created
-router.delete('/delete', middleware.validateSession, async (req, res) => {
+router.delete('/delete/:commentId', middleware.validateSession, async (req, res) => {
     const {id} = req.user;
-    const {CommentId} = req.body;
     try {
         const deletedComment = await CommModel.destroy({
             where: { 
                 userId: id,
-                id: CommentId,
+                id: req.params.commentId,
 
             }
         })
