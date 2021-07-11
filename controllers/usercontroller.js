@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const {UniqueConstraintError} = require("sequelize/lib/errors");
-const {UserModel} = require('../models');
+const {UserModel, CommModel, GameModel} = require('../models');
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const middleware = require('../middleware');
@@ -102,12 +102,23 @@ router.delete('/delete/admin/:userId', middleware.validateSession, async (req, r
     const {userId} = req.params;
     if (req.user.role === 'admin'){
         try{
+            const deleteComments = await CommModel.destroy({
+                where:{userId: userId}
+            })
+
+            const deleteGames = await GameModel.destroy({
+                where: {userId: userId}
+            })
+
             const deleteUser = await UserModel.destroy({
                 where: { id: userId }
             })
+
             res.status(200).json({
                 message: "User successfully deleted",
-                deletedUser: deleteUser
+                deletedUser: deleteUser,
+                deleteGames: deleteGames == 0 ? `No games to delete`: deleteGames,
+                deletedComments: deleteComments == 0 ? `No comments to delete`: deleteComments,
             })
         } catch(err){
             res.status(500).json({
