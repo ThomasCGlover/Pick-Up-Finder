@@ -124,6 +124,7 @@ router.delete('/delete/admin/:userId', middleware.validateSession, async (req, r
             res.status(500).json({
                 message: `Failed to delete user: ${err}`
             })
+            alert('You are not recognized as an administrator!')
         }
     } else{
         res.status(401).json({
