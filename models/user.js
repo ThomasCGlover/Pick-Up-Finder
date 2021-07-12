@@ -4,12 +4,12 @@ const db = require('../db');
 
 const User = db.define('user', {
     username: {
-        type: DataTypes.STRING(25),
+        type: DataTypes.STRING(5,20),
         allowNull: false,
         unique: true,
     },
     password: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(5,20),
         allowNull: false,
     },
     role: {

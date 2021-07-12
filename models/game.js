@@ -24,6 +24,7 @@ const Game = db.define("Game", {
     },
     skillPref: {
         type: DataTypes.STRING,
+        allowNull: false,
     }
 })
 
