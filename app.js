@@ -17,7 +17,7 @@ app.use("/comment",controllers.commController);
 dbConnection
     .authenticate()
     .then(() => dbConnection.sync(
-        // {force: true}
+        {alter: true}
     ))
     .then(() => {
         app.listen(process.env.PORT, () => {
