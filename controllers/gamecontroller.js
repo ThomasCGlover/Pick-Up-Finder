@@ -99,7 +99,7 @@ router.put("/playersneeded/:GameId", middleware.validateSession, async (req, res
     const playersNeededUpdate = await GameModel.update(
       {
         playersNeeded,
-       
+    
       },
       {
         where: {
