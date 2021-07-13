@@ -5,9 +5,8 @@ const middleware = require('../middleware');
 
 // create comment
 router.post("/add/:GameId", middleware.validateSession, async (req, res) => {
-    const {content} = req.body;
+    const {content, username} = req.body;
     const {id} = req.user;
-    const {username} = req.user;
     const createComment = {
         content: content,
         userId: id,
