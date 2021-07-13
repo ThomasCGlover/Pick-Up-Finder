@@ -11,17 +11,17 @@ UserModel.hasMany(GameModel, {
 
 
 UserModel.hasMany(CommModel, {
-    foreignKey: "userId"
+    foreignKey: "userId",
 });
 CommModel.belongsTo(UserModel);
 
 GameModel.hasMany(CommModel, {
     foreignKey: "GameId",
-
 });
 
 GameModel.belongsTo(UserModel);
 CommModel.belongsTo(GameModel);
+
 
 module.exports = {
     
