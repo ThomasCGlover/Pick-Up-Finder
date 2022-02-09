@@ -12,4 +12,4 @@ The app meets CRUD on two database tables: games and comments. Games are created
 
 The server is currently deployed on Heroku, as well as the client!
 
-Client Deployed Link: http://tcg-pickup-server.herokuapp.com/
+Client Deployed Link: http://tcg-pickup-client.herokuapp.com/
